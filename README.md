@@ -8,7 +8,12 @@
 
 Ever wondered what your house is *actually* worth — or just wanted to mess around with a machine learning model that thinks it knows? This app takes a bunch of details about a house (size, quality, garage space, how old it is, etc.) and spits out a price prediction, no crystal ball required.
 
-**🔗 Try it live:** [house-price-prediction9.streamlit.app](https://house-price-prediction9.streamlit.app/)
+**🔗 Web app:** [house-price-prediction9.streamlit.app](https://house-price-prediction9.streamlit.app/)
+**🔗 Live API:** [house-price-prediction-production-8533.up.railway.app/docs](https://house-price-prediction-production-8533.up.railway.app/docs)
+
+<p align="center">
+  <img src="app-screenshot.png" alt="House Price Prediction app screenshot" width="700">
+</p>
 
 ---
 
@@ -30,6 +35,24 @@ You can poke at it two ways:
 | joblib | saves/loads the trained model |
 | Docker | so it runs the same everywhere, no "works on my machine" |
 
+## Behind the scenes: exploring the data
+
+Before training anything, I dug into the dataset to see what actually drives price and what needed cleaning up.
+
+**Which features matter most?** A correlation heatmap made it obvious that overall quality, living area, and garage size track closely with sale price:
+
+<p align="center">
+  <img src="correlation-heatmap.png" alt="Correlation heatmap of features" width="650">
+</p>
+
+**What needed cleaning?** A handful of columns had a lot of missing values (pool quality, alley access, fence type) — nice-to-have context but not something every house has, so this shaped how they were handled going into training:
+
+<p align="center">
+  <img src="missing-values.png" alt="Missing values per feature" width="600">
+</p>
+
+The full walkthrough — cleaning, feature selection, model training, evaluation — is in `notebook.ipynb`.
+
 ## What's in here
 
 ```
@@ -38,6 +61,9 @@ You can poke at it two ways:
 ├── api.py                  # the FastAPI endpoint
 ├── house_price_model.jb    # the trained model, saved and ready to go
 ├── dataset.csv             # the data it learned from
+├── app-screenshot.png      # screenshot used in this README
+├── correlation-heatmap.png # screenshot used in this README
+├── missing-values.png      # screenshot used in this README
 ├── Dockerfile
 └── requirements.txt
 ```
@@ -69,7 +95,7 @@ docker run -p 8000:8000 house-price-predictor
 ## Poking the API directly
 
 ```bash
-curl -X POST "http://localhost:8000/predict" \
+curl -X POST "https://house-price-prediction-production-8533.up.railway.app/predict" \
   -H "Content-Type: application/json" \
   -d '{
     "OverallQual": 7,
@@ -91,6 +117,8 @@ curl -X POST "http://localhost:8000/predict" \
 ```
 
 > You'll get back: `{"predicted_price": <value>}`
+
+Or skip curl entirely and test it straight from your browser at the [interactive docs](https://house-price-prediction-production-8533.up.railway.app/docs).
 
 ## About the model
 
