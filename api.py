@@ -26,9 +26,9 @@ except Exception as e:
 class PredictionRequest(BaseModel):
     OverallQual: float
     GrLivArea: float
-    GarageCars: float
-    FirstFlrSF: float
-    TotBath: float
+    GarageArea: float
+    FirstFlrSF: float  # maps to '1stFlrSF' — Python names can't start with a digit
+    FullBath: float
     YearBuilt: float
     YearRemodAdd: float
     MasVnrArea: float
@@ -66,22 +66,22 @@ def predict(request: PredictionRequest):
 
         # NOTE: this order MUST match the column order used when the model was trained.
         features = np.array([[
-            request.OverallQual,
-            request.GrLivArea,
-            request.GarageCars,
-            request.FirstFlrSF,
-            request.TotBath,
-            request.YearBuilt,
-            request.YearRemodAdd,
-            request.MasVnrArea,
-            request.Fireplaces,
-            request.BsmtFinSF1,
-            request.LotFrontage,
-            request.WoodDeckSF,
-            request.OpenPorchSF,
-            request.LotArea,
-            central_air,
-        ]])
+    request.OverallQual,
+    request.GrLivArea,
+    request.GarageArea,
+    request.FirstFlrSF,
+    request.FullBath,
+    request.YearBuilt,
+    request.YearRemodAdd,
+    request.MasVnrArea,
+    request.Fireplaces,
+    request.BsmtFinSF1,
+    request.LotFrontage,
+    request.WoodDeckSF,
+    request.OpenPorchSF,
+    request.LotArea,
+    central_air,
+]])
 
         prediction = model.predict(features)[0]
         return PredictionResponse(predicted_price=round(float(prediction), 2))
