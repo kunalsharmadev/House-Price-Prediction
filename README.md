@@ -1,49 +1,48 @@
 # 🏠 House Price Prediction
 
-![Python](https://img.shields.io/badge/Python-3.10-blue)
+![Python](https://img.shields.io/badge/Python-3.11-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-REST%20API-teal)
 ![Streamlit](https://img.shields.io/badge/Streamlit-Web%20App-red)
 ![Docker](https://img.shields.io/badge/Docker-Containerized-blue)
+![Status](https://img.shields.io/badge/status-live-brightgreen)
 
-A machine learning web app that predicts house sale prices from property features, served through both a **Streamlit UI** and a **FastAPI REST endpoint**, containerized with Docker.
+Ever wondered what your house is *actually* worth — or just wanted to mess around with a machine learning model that thinks it knows? This app takes a bunch of details about a house (size, quality, garage space, how old it is, etc.) and spits out a price prediction, no crystal ball required.
 
-**🔗 Live demo:** [house-price-prediction9.streamlit.app](https://house-price-prediction9.streamlit.app/)
-
-![Demo Preview](https://img.shields.io/badge/status-live-brightgreen)
+**🔗 Try it live:** [house-price-prediction9.streamlit.app](https://house-price-prediction9.streamlit.app/)
 
 ---
 
-## What this does
+## What it does
 
-Given details about a house — square footage, quality rating, garage size, year built, and more — the app predicts its likely sale price using a regression model trained on housing data (Ames-style feature set).
+Feed it the basics about a house — square footage, overall quality rating, garage size, year built, and a handful of other features — and a regression model trained on real housing data guesses at the sale price.
 
-Two ways to use it:
-- **Web app** — fill in a form, click predict, get a price instantly.
-- **REST API** — `POST /predict` with a JSON payload, get a price back for integration into other tools.
+You can poke at it two ways:
+- **The web app** — a simple form, fill it out, hit predict, watch the number appear.
+- **The API** — send it a `POST /predict` with JSON, get a price back. Good for hooking it into other projects.
 
-## Tech stack
+## Built with
 
-| Layer | Tool |
+| What | Why |
 |---|---|
-| Model training | scikit-learn, pandas (see `notebook.ipynb`) |
-| Model serving (API) | FastAPI, Pydantic |
-| Web UI | Streamlit |
-| Model persistence | joblib |
-| Containerization | Docker |
+| scikit-learn + pandas | trains and crunches the numbers (`notebook.ipynb`) |
+| FastAPI | serves predictions over a clean REST endpoint |
+| Streamlit | the friendly UI you actually click around in |
+| joblib | saves/loads the trained model |
+| Docker | so it runs the same everywhere, no "works on my machine" |
 
-## Project structure
+## What's in here
 
 ```
-├── notebook.ipynb          # EDA, feature engineering, model training
-├── app.py                  # Streamlit web app
-├── api.py                  # FastAPI REST endpoint
-├── house_price_model.jb    # Trained model (joblib)
-├── dataset.csv             # Training data
+├── notebook.ipynb          # where the model actually gets trained (EDA included)
+├── app.py                  # the Streamlit app
+├── api.py                  # the FastAPI endpoint
+├── house_price_model.jb    # the trained model, saved and ready to go
+├── dataset.csv             # the data it learned from
 ├── Dockerfile
 └── requirements.txt
 ```
 
-## Running locally
+## Running it yourself
 
 ```bash
 git clone https://github.com/kunalsharmadev/House-Price-Prediction.git
@@ -51,23 +50,23 @@ cd House-Price-Prediction
 pip install -r requirements.txt
 ```
 
-**Streamlit app:**
+**Want the web app?**
 ```bash
 streamlit run app.py
 ```
 
-**FastAPI server:**
+**Want the API instead?**
 ```bash
 uvicorn api:app --reload
 ```
 
-**With Docker:**
+**Prefer Docker?**
 ```bash
 docker build -t house-price-predictor .
 docker run -p 8000:8000 house-price-predictor
 ```
 
-## API usage
+## Poking the API directly
 
 ```bash
 curl -X POST "http://localhost:8000/predict" \
@@ -91,24 +90,24 @@ curl -X POST "http://localhost:8000/predict" \
   }'
 ```
 
-> Response: `{"predicted_price": <value>}`
+> You'll get back: `{"predicted_price": <value>}`
 
-## Model
+## About the model
 
-Trained in `notebook.ipynb` on 15 property features (quality rating, living area, garage capacity, basement finish, lot size, year built/remodeled, and more). See the notebook for the full EDA, feature selection, and evaluation metrics.
+Trained in `notebook.ipynb` on 15 property features — quality, living area, garage capacity, basement finish, lot size, and more. Crack open the notebook if you want to see the full data exploration and how it landed on this set of features.
 
-## Roadmap
+## What's next
 
-- [ ] Align feature names/units between the API and Streamlit inputs
-- [ ] Add input validation ranges and error handling for out-of-range values
-- [ ] Add model evaluation metrics (RMSE, R²) to this README
-- [ ] Add automated tests for the API endpoint
-- [ ] CI pipeline for build/test on push
+- [ ] Get the API and the Streamlit app fully in sync on feature names/units
+- [ ] Add sane input validation so it doesn't choke on weird values
+- [ ] Publish real evaluation metrics (RMSE, R²) here instead of leaving you guessing
+- [ ] A few automated tests, because hope is not a strategy
+- [ ] Wire up CI so every push gets checked automatically
 
 ## License
 
-This project is open source and available under the [MIT License](LICENSE).
+MIT — see [LICENSE](LICENSE). Do what you want with it.
 
 ## Author
 
-[Kunal Sharma](https://github.com/kunalsharmadev)
+Made by [Kunal Sharma](https://github.com/kunalsharmadev)
